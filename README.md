@@ -3,7 +3,7 @@
 A production-grade web application that connects directly to the New York Times API to ingest, clean, and visualize live news headline trends in real-time. The portal features a custom statistical language suite alongside a machine learning pipeline designed to track historical daily occurrences and project public interest indicators 30 days into the future.
 
 ## Live Demo
-Experience the application live: [Click here] (https://nlp-nyt-headline-analytics-dnvbw26pkneajb7wq9lb6r.streamlit.app)
+Experience the application live: [Click here](https://nlp-nyt-headline-analytics-dnvbw26pkneajb7wq9lb6r.streamlit.app)
 
 ## Core Features and Engineering Pillars
 * **Live API Streaming Architecture:** Bypasses static datasets to pull real-time historical data payloads directly via the official New York Times Archive API gateway.
