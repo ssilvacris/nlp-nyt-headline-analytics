@@ -1,0 +1,6 @@
+
+Core Framework: streamlit==1.32.0
+Machine Learning and Analysis: scikit-learn==1.4.0, pandas==2.2.0, numpy==1.26.0
+Data Ingestion and Engineering: requests==2.31.0
+Natural Language Processing: nltk==3.8.1, wordcloud==1.9.3
+Data Visualization Matrix: matplotlib==3.8.2, seaborn==0.13.2
