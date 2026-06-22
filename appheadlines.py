@@ -47,6 +47,7 @@ def fetch_previous_month_headlines(api_key):
                 dates.append(doc.get('pub_date', None))
                 
         headlines_df = pd.DataFrame({'date': dates, 'headline': headlines})
+        # Use mixed format parsing to handle dynamic ISO8601 variations safely
         headlines_df['date'] = pd.to_datetime(headlines_df['date'], format='mixed', utc=True).dt.date
         return headlines_df
     else:
@@ -65,8 +66,13 @@ def predict_next_words(model, starting_word, top_n=5):
         return f"The word '{starting_word}' was not found in last month's text context."
     return model[starting_word].most_common(top_n)
 
+# Secure authentication pipeline layer using Streamlit Secrets cloud storage
 st.sidebar.header("API & Parameter Controls")
-api_key = st.sidebar.text_input("Enter NYT API Key", type="password")
+if "NYT_API_KEY" in st.secrets:
+    api_key = st.secrets["NYT_API_KEY"]
+else:
+    api_key = st.sidebar.text_input("Enter NYT API Key", type="password")
+
 lookback_months = st.sidebar.slider("Historical Window (Months)", 1, 6, 3)
 
 @st.cache_data(ttl=86400) 
@@ -126,7 +132,6 @@ if api_key:
         timeline_df = pd.DataFrame({'Day': unique_days, 'Occurrences': daily_counts})
         timeline_df['Type'] = 'Historical'
         
-        # --- MACHINE LEARNING FORECASTING PIPELINE (OPTIMIZED AXIS) ---
         if len(timeline_df) > 1:
             X = np.array(range(len(timeline_df))).reshape(-1, 1)
             y = timeline_df['Occurrences'].values
@@ -154,8 +159,7 @@ if api_key:
             fig_time, ax_time = plt.subplots(figsize=(10, 4))
             sns.lineplot(data=combined_df, x='Day', y='Occurrences', hue='Type', palette=['#1f77b4', '#d62728'], ax=ax_time)
             
-            # Fixes the crowded date axis by spacing out labels every 5 days
-            import matplotlib.dates as mdates
+            # Formats horizontal ticks to sample data points every 5 days, avoiding overlap noise
             ax_time.set_xticks(combined_df['Day'][::5])
             
             plt.xticks(rotation=45)
